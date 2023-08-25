@@ -8,8 +8,11 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
+import { CreateStudentDto } from './dto/create-student.dto';
 
 @Controller('students')
 export class StudentsController {
@@ -26,8 +29,8 @@ export class StudentsController {
   }
 
   @Post()
-  createStudent(@Body() body: any) {
-    return body;
+  createStudent(@Body() createStudentDto: CreateStudentDto) {
+    return this.studentsService.create(createStudentDto);
   }
 
   @Patch(':id')
