@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
+import { UpdateStudentDto } from './dto/update-student.dto';
 
 @Controller('students')
 export class StudentsController {
@@ -34,15 +35,15 @@ export class StudentsController {
   }
 
   @Patch(':id')
-  updateStudent(@Body() body: any) {
-    return body;
+  updateStudent(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateStudentDto: UpdateStudentDto,
+  ) {
+    return this.studentsService.update(id, updateStudentDto);
   }
 
   @Delete(':id')
-  deleteStudent(@Param('id', ParseIntPipe) id: number) {
-    return {
-      method: 'delete',
-      id,
-    };
+  deleteStudent(@Param('id', ParseUUIDPipe) id: string) {
+    return this.studentsService.delete(id);
   }
 }
