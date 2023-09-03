@@ -11,21 +11,11 @@ import { CreateStudentDto, UpdateStudentDto } from './dto';
 @Injectable()
 export class StudentsService {
   private students: Student[] = [
-    {
-      id: uuid(),
-      name: 'Luis',
-      lastName: 'Perez',
-    },
-    {
-      id: uuid(),
-      name: 'Maria',
-      lastName: 'Gonzales',
-    },
-    {
-      id: uuid(),
-      name: 'Rosa',
-      lastName: 'Fernandez',
-    },
+    // {
+    //   id: uuid(),
+    //   name: 'Luis',
+    //   lastName: 'Perez',
+    // },
   ];
 
   findAll() {
