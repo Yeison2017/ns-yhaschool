@@ -64,4 +64,8 @@ export class StudentsService {
     const student = this.findOneById(id);
     this.students = this.students.filter((student) => student.id !== id);
   }
+
+  fillStudentsWithSeedData(students: Student[]) {
+    this.students = students;
+  }
 }

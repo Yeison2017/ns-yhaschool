@@ -65,4 +65,8 @@ export class DocumentTypeService {
       (documentType) => documentType.id !== id,
     );
   }
+
+  filldocumentTypesWithSeedData(documentType: DocumentType[]) {
+    this.documentTypes = documentType;
+  }
 }
