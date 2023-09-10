@@ -26,17 +26,17 @@ export class DocumentTypeController {
     return this.documentTypeService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.documentTypeService.findOne(id);
+  @Get(':term')
+  findOne(@Param('term') term: string) {
+    return this.documentTypeService.findOne(term);
   }
 
-  @Patch(':id')
+  @Patch(':term')
   update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('term') term: string,
     @Body() updateDocumentTypeDto: UpdateDocumentTypeDto,
   ) {
-    return this.documentTypeService.update(id, updateDocumentTypeDto);
+    return this.documentTypeService.update(term, updateDocumentTypeDto);
   }
 
   @Delete(':id')

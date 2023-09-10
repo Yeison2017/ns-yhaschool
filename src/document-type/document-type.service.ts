@@ -1,13 +1,24 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, isValidObjectId } from 'mongoose';
 
 import { DocumentType } from './entities/document-type.entity';
-
 import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
 import { UpdateDocumentTypeDto } from './dto/update-document-type.dto';
 
 @Injectable()
 export class DocumentTypeService {
+  constructor(
+    @InjectModel(DocumentType.name)
+    private readonly documentTypeModel: Model<DocumentType>,
+  ) {}
+
   private documentTypes: DocumentType[] = [
     // {
     //   id: uuid(),
@@ -16,48 +27,72 @@ export class DocumentTypeService {
     // },
   ];
 
-  create(createDocumentTypeDto: CreateDocumentTypeDto) {
-    const { name } = CreateDocumentTypeDto;
+  async create(createDocumentTypeDto: CreateDocumentTypeDto) {
+    const { name, abbreviation } = createDocumentTypeDto;
 
-    const documentType: DocumentType = {
-      id: uuid(),
-      name: name.toLocaleLowerCase(),
-      createAt: new Date().getTime(),
-    };
+    createDocumentTypeDto.name = name.toLocaleLowerCase();
+    createDocumentTypeDto.abbreviation = abbreviation.toLocaleLowerCase();
 
-    this.documentTypes.push(documentType);
-
-    return documentType;
+    try {
+      const documentType = await this.documentTypeModel.create(
+        createDocumentTypeDto,
+      );
+      return documentType;
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new BadRequestException(
+          `DocumentType exists in db ${JSON.stringify(error.keyValue)}`,
+        );
+      }
+      console.log(error);
+      throw new InternalServerErrorException(
+        `Can't create documentType - Check server logs`,
+      );
+    }
   }
 
   findAll() {
     return this.documentTypes;
   }
 
-  findOne(id: string) {
-    const documentType = this.documentTypes.find(
-      (documentType) => documentType.id === id,
-    );
+  async findOne(term: string) {
+    let documentType = DocumentType;
+
+    if (isValidObjectId(term)) {
+      documentType = await this.documentTypeModel.findById(term);
+    }
+
     if (!documentType) {
-      throw new NotFoundException(`DocumentType with id "${id}" not found`);
+      throw new NotFoundException(`DocumentType with id "${term}" not found`);
     }
 
     return documentType;
   }
 
-  update(id: string, updateDocumentTypeDto: UpdateDocumentTypeDto) {
-    let documentTypeDB = this.findOne(id);
+  async update(term: string, updateDocumentTypeDto: UpdateDocumentTypeDto) {
+    if (updateDocumentTypeDto.name) {
+      updateDocumentTypeDto.name =
+        updateDocumentTypeDto.name.toLocaleLowerCase();
+    }
 
-    this.documentTypes = this.documentTypes.map((documentType) => {
-      if (documentType.id === id) {
-        documentType.updateAt = new Date().getTime();
-        documentType = { ...documentType, ...updateDocumentTypeDto };
-        return documentType;
+    try {
+      const updateDocumentType = await this.documentTypeModel.findByIdAndUpdate(
+        term,
+        updateDocumentTypeDto,
+        { new: true },
+      );
+
+      return updateDocumentType;
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new BadRequestException(
+          `DocumentType exists in db ${JSON.stringify(error.keyValue)}`,
+        );
       }
-      return documentType;
-    });
-
-    return documentTypeDB;
+      throw new InternalServerErrorException(
+        `Can't create documentType - Check server logs`,
+      );
+    }
   }
 
   remove(id: string) {

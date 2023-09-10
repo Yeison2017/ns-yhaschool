@@ -2,8 +2,17 @@ import { IsString } from 'class-validator';
 
 export class CreateStudentDto {
   @IsString()
-  readonly name: string;
+  firstName: string;
 
   @IsString()
-  readonly lastName: string;
+  secondName: string;
+
+  @IsString()
+  lastName: string;
+
+  @IsString()
+  secondSurname: string;
+
+  @IsString()
+  identification: string;
 }

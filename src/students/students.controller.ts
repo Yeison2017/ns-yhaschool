@@ -24,9 +24,9 @@ export class StudentsController {
     return this.studentsService.findAll();
   }
 
-  @Get(':id')
-  getStudentById(@Param('id', ParseUUIDPipe) id: string) {
-    return this.studentsService.findOneById(id);
+  @Get(':term')
+  findOne(@Param('term') term: string) {
+    return this.studentsService.findOne(term);
   }
 
   @Post()
@@ -34,12 +34,14 @@ export class StudentsController {
     return this.studentsService.create(createStudentDto);
   }
 
-  @Patch(':id')
-  updateStudent(
-    @Param('id', ParseUUIDPipe) id: string,
+  @Patch(':term')
+  update(
+    @Param('term') term: string,
     @Body() updateStudentDto: UpdateStudentDto,
   ) {
-    return this.studentsService.update(id, updateStudentDto);
+    updateStudentDto.firstName;
+
+    return this.studentsService.update(term, updateStudentDto);
   }
 
   @Delete(':id')

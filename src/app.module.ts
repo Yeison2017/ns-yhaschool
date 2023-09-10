@@ -1,9 +1,11 @@
 import { join } from 'path';
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
+
 import { StudentsModule } from './students/students.module';
 import { DocumentTypeModule } from './document-type/document-type.module';
 import { SeedModule } from './seed/seed.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -13,6 +15,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),
+    MongooseModule.forRoot('mongodb://localhost:27017/nest-yhaSchool'),
   ],
   controllers: [],
   providers: [],

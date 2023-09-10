@@ -13,7 +13,6 @@ export class SeedService {
   ) {}
 
   populateDB() {
-    this.studentsService.fillStudentsWithSeedData(STUDENTS_SEED);
     this.documentTypes.filldocumentTypesWithSeedData(DOCUMENT_TYPES_SEED);
     return 'SEED executed';
   }
