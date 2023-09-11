@@ -81,8 +81,14 @@ export class DocumentTypeService {
   }
 
   async remove(id: string) {
-    await this.findOne(id);
-    await this.documentTypeModel.findByIdAndDelete(id);
+    const { deletedCount } = await this.documentTypeModel.deleteOne({
+      _id: id,
+    });
+    if (deletedCount === 0) {
+      throw new BadRequestException(`DocumentType with id "${id}" not found`);
+    }
+
+    return;
   }
 
   filldocumentTypesWithSeedData(documentType: DocumentType[]) {

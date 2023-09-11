@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -75,8 +76,12 @@ export class StudentsService {
   }
 
   async remove(id: string) {
-    await this.findOne(id);
-    await this.studentModel.findByIdAndDelete(id);
+    const { deletedCount } = await this.studentModel.deleteOne({ _id: id });
+    if (deletedCount === 0) {
+      throw new BadRequestException(`Student with id "${id}" not found`);
+    }
+
+    return;
   }
 
   fillStudentsWithSeedData(students: Student[]) {

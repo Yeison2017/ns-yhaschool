@@ -6,6 +6,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { StudentsModule } from './students/students.module';
 import { DocumentTypeModule } from './document-type/document-type.module';
 import { SeedModule } from './seed/seed.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SeedModule } from './seed/seed.module';
       rootPath: join(__dirname, '..', 'public'),
     }),
     MongooseModule.forRoot('mongodb://localhost:27017/nest-yhaSchool'),
+    CommonModule,
   ],
   controllers: [],
   providers: [],

@@ -14,6 +14,7 @@ import {
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id.pipe';
 
 @Controller('students')
 export class StudentsController {
@@ -45,7 +46,7 @@ export class StudentsController {
   }
 
   @Delete(':id')
-  deleteStudent(@Param('id') id: string) {
+  remove(@Param('id', ParseMongoIdPipe) id: string) {
     return this.studentsService.remove(id);
   }
 }
