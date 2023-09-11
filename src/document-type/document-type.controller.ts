@@ -40,7 +40,7 @@ export class DocumentTypeController {
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  remove(@Param('id') id: string) {
     return this.documentTypeService.remove(id);
   }
 }

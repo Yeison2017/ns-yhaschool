@@ -39,15 +39,7 @@ export class DocumentTypeService {
       );
       return documentType;
     } catch (error) {
-      if (error.code === 11000) {
-        throw new BadRequestException(
-          `DocumentType exists in db ${JSON.stringify(error.keyValue)}`,
-        );
-      }
-      console.log(error);
-      throw new InternalServerErrorException(
-        `Can't create documentType - Check server logs`,
-      );
+      this.handleException(error);
     }
   }
 
@@ -84,24 +76,26 @@ export class DocumentTypeService {
 
       return updateDocumentType;
     } catch (error) {
-      if (error.code === 11000) {
-        throw new BadRequestException(
-          `DocumentType exists in db ${JSON.stringify(error.keyValue)}`,
-        );
-      }
-      throw new InternalServerErrorException(
-        `Can't create documentType - Check server logs`,
-      );
+      this.handleException(error);
     }
   }
 
-  remove(id: string) {
-    this.documentTypes = this.documentTypes.filter(
-      (documentType) => documentType.id !== id,
-    );
+  async remove(id: string) {
+    await this.documentTypeModel.findByIdAndDelete(id);
   }
 
   filldocumentTypesWithSeedData(documentType: DocumentType[]) {
     this.documentTypes = documentType;
+  }
+
+  private handleException(error: any) {
+    if (error.code === 11000) {
+      throw new BadRequestException(
+        `DocumentType exists in db ${JSON.stringify(error.keyValue)}`,
+      );
+    }
+    throw new InternalServerErrorException(
+      `Can't create documentType - Check server logs`,
+    );
   }
 }

@@ -74,9 +74,8 @@ export class StudentsService {
     return updateStudent;
   }
 
-  delete(id: string) {
-    const student = this.findOne(id);
-    this.students = this.students.filter((student) => student.id !== id);
+  async remove(id: string) {
+    await this.studentModel.findByIdAndDelete(id);
   }
 
   fillStudentsWithSeedData(students: Student[]) {
