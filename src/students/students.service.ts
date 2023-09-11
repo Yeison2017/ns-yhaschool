@@ -75,6 +75,7 @@ export class StudentsService {
   }
 
   async remove(id: string) {
+    await this.findOne(id);
     await this.studentModel.findByIdAndDelete(id);
   }
 

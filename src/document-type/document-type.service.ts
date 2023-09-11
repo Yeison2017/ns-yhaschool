@@ -81,6 +81,7 @@ export class DocumentTypeService {
   }
 
   async remove(id: string) {
+    await this.findOne(id);
     await this.documentTypeModel.findByIdAndDelete(id);
   }
 
