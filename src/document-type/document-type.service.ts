@@ -4,7 +4,6 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, isValidObjectId } from 'mongoose';
 
@@ -18,14 +17,6 @@ export class DocumentTypeService {
     @InjectModel(DocumentType.name)
     private readonly documentTypeModel: Model<DocumentType>,
   ) {}
-
-  private documentTypes: DocumentType[] = [
-    // {
-    //   id: uuid(),
-    //   name: 'Cédula de ciudadanía',
-    //   createAt: new Date().getTime(),
-    // },
-  ];
 
   async create(createDocumentTypeDto: CreateDocumentTypeDto) {
     const { name, abbreviation } = createDocumentTypeDto;
@@ -44,7 +35,7 @@ export class DocumentTypeService {
   }
 
   findAll() {
-    return this.documentTypes;
+    return this.documentTypeModel.find();
   }
 
   async findOne(term: string) {
@@ -89,10 +80,6 @@ export class DocumentTypeService {
     }
 
     return;
-  }
-
-  filldocumentTypesWithSeedData(documentType: DocumentType[]) {
-    this.documentTypes = documentType;
   }
 
   private handleException(error: any) {

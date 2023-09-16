@@ -9,6 +9,7 @@ import { Model, isValidObjectId } from 'mongoose';
 
 import { Student } from './entities/students.entity';
 import { CreateStudentDto, UpdateStudentDto } from './dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class StudentsService {
@@ -17,10 +18,15 @@ export class StudentsService {
     private readonly studentModel: Model<Student>,
   ) {}
 
-  private students: Student[] = [];
+  findAll(paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
 
-  findAll() {
-    return this.students;
+    return this.studentModel
+      .find()
+      .limit(limit)
+      .skip(offset)
+      .sort({ firstName: 1 })
+      .select('__v');
   }
 
   async findOne(term: string) {
@@ -82,9 +88,5 @@ export class StudentsService {
     }
 
     return;
-  }
-
-  fillStudentsWithSeedData(students: Student[]) {
-    this.students = students;
   }
 }

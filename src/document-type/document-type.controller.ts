@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { DocumentTypeService } from './document-type.service';
 import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
@@ -23,7 +24,7 @@ export class DocumentTypeController {
   }
 
   @Get()
-  findAll() {
+  findAll(@Query() queryParameters) {
     return this.documentTypeService.findAll();
   }
 

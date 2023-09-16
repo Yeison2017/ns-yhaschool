@@ -8,6 +8,9 @@ export class Student extends Document {
   })
   firstName: string;
 
+  @Prop({
+    index: true,
+  })
   secondName: string;
 
   @Prop({
@@ -15,6 +18,9 @@ export class Student extends Document {
   })
   lastName: string;
 
+  @Prop({
+    index: true,
+  })
   secondSurname: string;
 
   @Prop({
