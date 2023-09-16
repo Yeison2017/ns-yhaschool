@@ -11,7 +11,7 @@ import {
 @Module({
   controllers: [DocumentTypeController],
   providers: [DocumentTypeService],
-  exports: [DocumentTypeService],
+  exports: [MongooseModule, DocumentTypeService],
   imports: [
     MongooseModule.forFeature([
       {

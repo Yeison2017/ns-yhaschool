@@ -1,18 +1,12 @@
-import { v4 as uuid } from 'uuid';
-
-import { DocumentType } from 'src/document-type/entities/document-type.entity';
+import { DocumentType } from 'src/document-type/interfaces/document-type.interface';
 
 export const DOCUMENT_TYPES_SEED: DocumentType[] = [
-  // {
-  //   // id: uuid(),
-  //   name: 'Cédula',
-  //   // abbreviation: 'CC',
-  //   createAt: new Date().getTime(),
-  // },
-  // {
-  //   // id: uuid(),
-  //   name: 'Tarjeta de identidad',
-  //   // abbreviation: 'TI',
-  //   createAt: new Date().getTime(),
-  // },
+  {
+    name: 'Cédula',
+    abbreviation: 'CC',
+  },
+  {
+    name: 'Tarjeta de identidad',
+    abbreviation: 'TI',
+  },
 ];
