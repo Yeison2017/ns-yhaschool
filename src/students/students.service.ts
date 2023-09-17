@@ -33,15 +33,11 @@ export class StudentsService {
       .limit(limit)
       .skip(offset)
       .sort({ firstName: 1 })
-      .select('__v');
+      .select('-__v');
   }
 
   async findOne(term: string) {
     let student = Student;
-
-    // if (!isNaN(+term)) {
-    //   student = await this.studentModel.findOne({ identification: term });
-    // }
 
     if (isValidObjectId(term)) {
       student = await this.studentModel.findById(term);
