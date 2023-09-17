@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, isValidObjectId } from 'mongoose';
+import { ConfigService } from '@nestjs/config';
 
 import { Student } from './entities/students.entity';
 import { CreateStudentDto, UpdateStudentDto } from './dto';
@@ -13,13 +14,19 @@ import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class StudentsService {
+  private defaultLimit: number;
+
   constructor(
     @InjectModel(Student.name)
     private readonly studentModel: Model<Student>,
-  ) {}
+
+    private readonly configService: ConfigService,
+  ) {
+    this.defaultLimit = configService.get<number>('defaultLimit');
+  }
 
   findAll(paginationDto: PaginationDto) {
-    const { limit = 10, offset = 0 } = paginationDto;
+    const { limit = this.defaultLimit, offset = 0 } = paginationDto;
 
     return this.studentModel
       .find()
