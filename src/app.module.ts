@@ -9,11 +9,13 @@ import { DocumentTypeModule } from './document-type/document-type.module';
 import { SeedModule } from './seed/seed.module';
 import { CommonModule } from './common/common.module';
 import { EnvConfiguration } from './common/config/env.config';
+import { JoiValidationShema } from './common/config/joi.validation';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [EnvConfiguration],
+      validationSchema: JoiValidationShema,
     }),
     StudentsModule,
     DocumentTypeModule,

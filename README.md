@@ -39,7 +39,16 @@ docker-compose up -d
 mongodb://localhost:27017/nest-yhaSchool
 ```
 
-6. Reconstruir la base de datos con la semilla
+6. Clonar el archivo ```.env.template``` y renorbrar la copia a ```.env```
+  
+7. Llenar las variables de entorno definidas en el ```.env```
+
+8. Ejecutar la aplicación en dev:
+```
+yarn start:dev
+```
+
+9. Reconstruir la base de datos con la semilla
 ```
 localhost:3000/api/seed
 ```
