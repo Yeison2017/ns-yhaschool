@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  yhaschoolapp:
+    depends_on:
+      - db
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: yhaschool-docker
+    container_name: yhaschoolapp
+    restart: always # reiniciar el contenedor si se detiene
+    ports:
+      - "${PORT}:${PORT}"
+    # working_dir: /var/www/yhaschool
+    environment:
+      MONGODB: ${MONGODB}
+      PORT: ${PORT}
+      DEFAULT_LIMIT: ${DEFAULT_LIMIT}
+    # volumes:
+    #   - ./:/var/www/yhaschool
+
+  db:
+    image: mongo:5
+    container_name: mongo-yha
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGODB_DATABASE: nest-yhaSchool
+    volumes:
+      - ./mongo:/data/db
