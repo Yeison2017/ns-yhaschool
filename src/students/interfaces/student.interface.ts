@@ -1,5 +1,8 @@
 export interface Student {
-  id: string;
-  name: string;
+  // id: string;
+  firstName: string;
+  secondName: string;
   lastName: string;
+  secondSurname: string;
+  identification: string;
 }

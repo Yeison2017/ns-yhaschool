@@ -1,71 +1,95 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, isValidObjectId } from 'mongoose';
+import { ConfigService } from '@nestjs/config';
 
-import { Student } from './interfaces/student.interface';
+import { Student } from './entities/students.entity';
 import { CreateStudentDto, UpdateStudentDto } from './dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class StudentsService {
-  private students: Student[] = [
-    // {
-    //   id: uuid(),
-    //   name: 'Luis',
-    //   lastName: 'Perez',
-    // },
-  ];
+  private defaultLimit: number;
 
-  findAll() {
-    return this.students;
+  constructor(
+    @InjectModel(Student.name)
+    private readonly studentModel: Model<Student>,
+
+    private readonly configService: ConfigService,
+  ) {
+    this.defaultLimit = configService.get<number>('defaultLimit');
   }
 
-  findOneById(id: string) {
-    const student = this.students.find((student) => student.id === id);
-    if (!student)
-      throw new NotFoundException(`Student with id '${id}' not found`);
+  findAll(paginationDto: PaginationDto) {
+    const { limit = this.defaultLimit, offset = 0 } = paginationDto;
+
+    return this.studentModel
+      .find()
+      .limit(limit)
+      .skip(offset)
+      .sort({ firstName: 1 })
+      .select('-__v');
+  }
+
+  async findOne(term: string) {
+    let student = Student;
+
+    if (isValidObjectId(term)) {
+      student = await this.studentModel.findById(term);
+    }
+
+    if (!student) {
+      throw new NotFoundException(`Student with id "${term}" not found`);
+    }
+
     return student;
   }
 
-  create(createStudenDto: CreateStudentDto) {
-    const student: Student = {
-      id: uuid(),
-      ...createStudenDto,
-    };
+  async create(createStudenDto: CreateStudentDto) {
+    const { firstName, secondName, lastName, secondSurname } = createStudenDto;
 
-    this.students.push(student);
+    createStudenDto.firstName = firstName.toLocaleLowerCase();
+    createStudenDto.secondName = secondName.toLocaleLowerCase();
+    createStudenDto.lastName = lastName.toLocaleLowerCase();
+    createStudenDto.secondSurname = secondSurname.toLocaleLowerCase();
 
-    return student;
-  }
-
-  update(id: string, updateStudentDto: UpdateStudentDto) {
-    let studentDB = this.findOneById(id);
-
-    if (updateStudentDto.id && updateStudentDto.id !== id)
-      throw new BadRequestException(`Car id is not valid inside body`);
-
-    this.students = this.students.map((student) => {
-      if (student.id === id) {
-        studentDB = {
-          ...studentDB,
-          ...updateStudentDto,
-          id,
-        };
-      }
-
+    try {
+      const student = await this.studentModel.create(createStudenDto);
       return student;
-    });
-    return studentDB;
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(
+        `Can't create student - Check server logs`,
+      );
+    }
   }
 
-  delete(id: string) {
-    const student = this.findOneById(id);
-    this.students = this.students.filter((student) => student.id !== id);
+  async update(term: string, updateStudentDto: UpdateStudentDto) {
+    if (updateStudentDto.firstName) {
+      updateStudentDto.firstName =
+        updateStudentDto.firstName.toLocaleLowerCase();
+    }
+
+    const updateStudent = await this.studentModel.findByIdAndUpdate(
+      term,
+      updateStudentDto,
+      { new: true },
+    );
+
+    return updateStudent;
   }
 
-  fillStudentsWithSeedData(students: Student[]) {
-    this.students = students;
+  async remove(id: string) {
+    const { deletedCount } = await this.studentModel.deleteOne({ _id: id });
+    if (deletedCount === 0) {
+      throw new BadRequestException(`Student with id "${id}" not found`);
+    }
+
+    return;
   }
 }

@@ -1,31 +1,21 @@
 import { v4 as uuid } from 'uuid';
+import { faker } from '@faker-js/faker';
 
 import { Student } from 'src/students/interfaces/student.interface';
 
-export const STUDENTS_SEED: Student[] = [
+export const createRandomStudent = (): Student => {
+  return {
+    firstName: faker.person.firstName(),
+    secondName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    secondSurname: faker.person.lastName(),
+    identification: faker.number.int({ max: 9999999 }).toString(),
+  };
+};
+
+export const STUDENTS_SEED: Student[] = faker.helpers.multiple(
+  createRandomStudent,
   {
-    id: uuid(),
-    name: 'John',
-    lastName: 'Doe',
+    count: 5,
   },
-  {
-    id: uuid(),
-    name: 'Ezequiel',
-    lastName: 'Holgado',
-  },
-  {
-    id: uuid(),
-    name: 'Nicolas',
-    lastName: 'Reyes',
-  },
-  {
-    id: uuid(),
-    name: 'Fatima',
-    lastName: 'Muriel',
-  },
-  {
-    id: uuid(),
-    name: 'Modesta',
-    lastName: 'Navarro',
-  },
-];
+);

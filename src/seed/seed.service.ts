@@ -1,20 +1,28 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
-import { StudentsService } from 'src/students/students.service';
-import { DocumentTypeService } from 'src/document-type/document-type.service';
 import { STUDENTS_SEED } from './data/students.seed';
 import { DOCUMENT_TYPES_SEED } from './data/documentTypes.seed';
+import { Student } from 'src/students/entities/students.entity';
+import { DocumentType } from 'src/document-type/entities/document-type.entity';
 
 @Injectable()
 export class SeedService {
   constructor(
-    private readonly studentsService: StudentsService,
-    private readonly documentTypes: DocumentTypeService,
+    @InjectModel(Student.name)
+    private readonly studentsModel: Model<Student>,
+
+    @InjectModel(DocumentType.name)
+    private readonly documentTypeModel: Model<DocumentType>,
   ) {}
 
-  populateDB() {
-    this.studentsService.fillStudentsWithSeedData(STUDENTS_SEED);
-    this.documentTypes.filldocumentTypesWithSeedData(DOCUMENT_TYPES_SEED);
-    return 'SEED executed';
+  async executeSeed() {
+    await this.studentsModel.deleteMany({});
+    await this.documentTypeModel.deleteMany({});
+
+    await this.studentsModel.insertMany(STUDENTS_SEED);
+    await this.documentTypeModel.insertMany(DOCUMENT_TYPES_SEED);
+    return 'Seed Executed';
   }
 }
