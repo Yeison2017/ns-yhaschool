@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class DocumentType {
+export class PaymentConcept {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -10,8 +10,8 @@ export class DocumentType {
   })
   name: string;
 
-  @Column('text', {
-    unique: true,
+  @Column('int', {
+    array: true,
   })
-  abbreviation: string;
+  regularPayments: number[];
 }

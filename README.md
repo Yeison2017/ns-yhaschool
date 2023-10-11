@@ -14,3 +14,11 @@ docker-compose up -d
 ```
 
 6. Levantar: ```yarn start:dev```
+
+
+## Comandos
+
+Crear un nuevo recurso
+```
+nest g res <entity> --no-spec
+```

@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { StudentsModule } from './students/students.module';
 import { DocumentTypeModule } from './document-type/document-type.module';
 import { SeedModule } from './seed/seed.module';
+import { PaymentConceptsModule } from './payment-concepts/payment-concepts.module';
 
 @Module({
   imports: [
@@ -21,12 +22,13 @@ import { SeedModule } from './seed/seed.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    StudentsModule,
-    DocumentTypeModule,
     SeedModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),
+    StudentsModule,
+    DocumentTypeModule,
+    PaymentConceptsModule,
   ],
   controllers: [],
   providers: [],

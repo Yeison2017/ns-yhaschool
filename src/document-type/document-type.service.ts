@@ -17,17 +17,14 @@ export class DocumentTypeService {
   ];
 
   create(createDocumentTypeDto: CreateDocumentTypeDto) {
-    const { name } = CreateDocumentTypeDto;
-
-    const documentType: DocumentType = {
-      id: uuid(),
-      name: name.toLocaleLowerCase(),
-      createAt: new Date().getTime(),
-    };
-
-    this.documentTypes.push(documentType);
-
-    return documentType;
+    // const { name, abbreviation  } = CreateDocumentTypeDto;
+    // const documentType: DocumentType = {
+    //   id: uuid(),
+    //   name: name.toLocaleLowerCase(),
+    //   abbreviation: new Date().getTime(),
+    // };
+    // this.documentTypes.push(documentType);
+    // return documentType;
   }
 
   findAll() {
@@ -46,18 +43,16 @@ export class DocumentTypeService {
   }
 
   update(id: string, updateDocumentTypeDto: UpdateDocumentTypeDto) {
-    let documentTypeDB = this.findOne(id);
-
-    this.documentTypes = this.documentTypes.map((documentType) => {
-      if (documentType.id === id) {
-        documentType.updateAt = new Date().getTime();
-        documentType = { ...documentType, ...updateDocumentTypeDto };
-        return documentType;
-      }
-      return documentType;
-    });
-
-    return documentTypeDB;
+    // let documentTypeDB = this.findOne(id);
+    // this.documentTypes = this.documentTypes.map((documentType) => {
+    //   if (documentType.id === id) {
+    //     documentType.updateAt = new Date().getTime();
+    //     documentType = { ...documentType, ...updateDocumentTypeDto };
+    //     return documentType;
+    //   }
+    //   return documentType;
+    // });
+    // return documentTypeDB;
   }
 
   remove(id: string) {
