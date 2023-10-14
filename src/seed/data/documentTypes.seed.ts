@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
-import { DocumentType } from 'src/document-type/entities/document-type.entity';
+import { DocumentType } from 'src/document-types/entities/document-type.entity';
 
 export const DOCUMENT_TYPES_SEED: DocumentType[] = [
   // {

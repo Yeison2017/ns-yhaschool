@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { StudentsModule } from './students/students.module';
-import { DocumentTypeModule } from './document-type/document-type.module';
+import { DocumentTypesModule } from './document-types/document-types.module';
 import { SeedModule } from './seed/seed.module';
 import { PaymentConceptsModule } from './payment-concepts/payment-concepts.module';
 
@@ -27,7 +27,7 @@ import { PaymentConceptsModule } from './payment-concepts/payment-concepts.modul
       rootPath: join(__dirname, '..', 'public'),
     }),
     StudentsModule,
-    DocumentTypeModule,
+    DocumentTypesModule,
     PaymentConceptsModule,
   ],
   controllers: [],

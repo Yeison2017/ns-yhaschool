@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { StudentsService } from 'src/students/students.service';
-import { DocumentTypeService } from 'src/document-type/document-type.service';
+import { DocumentTypesService } from 'src/document-types/document-types.service';
 import { STUDENTS_SEED } from './data/students.seed';
 import { DOCUMENT_TYPES_SEED } from './data/documentTypes.seed';
 
@@ -9,7 +9,7 @@ import { DOCUMENT_TYPES_SEED } from './data/documentTypes.seed';
 export class SeedService {
   constructor(
     private readonly studentsService: StudentsService,
-    private readonly documentTypes: DocumentTypeService,
+    private readonly documentTypes: DocumentTypesService,
   ) {}
 
   populateDB() {

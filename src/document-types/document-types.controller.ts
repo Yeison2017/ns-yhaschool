@@ -8,27 +8,27 @@ import {
   Delete,
   ParseUUIDPipe,
 } from '@nestjs/common';
-import { DocumentTypeService } from './document-type.service';
+import { DocumentTypesService } from './document-types.service';
 import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
 import { UpdateDocumentTypeDto } from './dto/update-document-type.dto';
 
 @Controller('document-type')
-export class DocumentTypeController {
-  constructor(private readonly documentTypeService: DocumentTypeService) {}
+export class DocumentTypesController {
+  constructor(private readonly documentTypesService: DocumentTypesService) {}
 
   @Post()
   create(@Body() createDocumentTypeDto: CreateDocumentTypeDto) {
-    return this.documentTypeService.create(createDocumentTypeDto);
+    return this.documentTypesService.create(createDocumentTypeDto);
   }
 
   @Get()
   findAll() {
-    return this.documentTypeService.findAll();
+    return this.documentTypesService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.documentTypeService.findOne(id);
+    return this.documentTypesService.findOne(id);
   }
 
   @Patch(':id')
@@ -36,11 +36,11 @@ export class DocumentTypeController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateDocumentTypeDto: UpdateDocumentTypeDto,
   ) {
-    return this.documentTypeService.update(id, updateDocumentTypeDto);
+    return this.documentTypesService.update(id, updateDocumentTypeDto);
   }
 
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.documentTypeService.remove(id);
+    return this.documentTypesService.remove(id);
   }
 }

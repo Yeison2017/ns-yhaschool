@@ -7,7 +7,7 @@ import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
 import { UpdateDocumentTypeDto } from './dto/update-document-type.dto';
 
 @Injectable()
-export class DocumentTypeService {
+export class DocumentTypesService {
   private documentTypes: DocumentType[] = [
     // {
     //   id: uuid(),
