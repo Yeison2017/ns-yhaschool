@@ -1,11 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+
 import { CreatePaymentConceptDto } from './dto/create-payment-concept.dto';
 import { UpdatePaymentConceptDto } from './dto/update-payment-concept.dto';
+import { PaymentConcept } from './entities/payment-concept.entity';
 
 @Injectable()
 export class PaymentConceptsService {
-  create(createPaymentConceptDto: CreatePaymentConceptDto) {
-    return 'This action adds a new paymentConcept';
+  private readonly logger = new Logger('PaymentConceptsService');
+
+  constructor(
+    @InjectRepository(PaymentConcept)
+    private readonly paymentConceptRepository: Repository<PaymentConcept>,
+  ) {}
+
+  async create(createPaymentConceptDto: CreatePaymentConceptDto) {
+    try {
+      const paymentConcept = this.paymentConceptRepository.create(
+        createPaymentConceptDto,
+      );
+      await this.paymentConceptRepository.save(paymentConcept);
+      return paymentConcept;
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
   findAll() {
@@ -22,5 +46,15 @@ export class PaymentConceptsService {
 
   remove(id: number) {
     return `This action removes a #${id} paymentConcept`;
+  }
+
+  private handleDBExceptions(error: any) {
+    if (error.code === '23505') {
+      throw new BadRequestException(error.detail);
+    }
+    this.logger.error(error);
+    throw new InternalServerErrorException(
+      'Unexpected error, check server logs',
+    );
   }
 }
