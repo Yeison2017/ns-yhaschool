@@ -8,7 +8,6 @@ import {
   Delete,
   Logger,
   ParseUUIDPipe,
-  NotFoundException,
 } from '@nestjs/common';
 import { PaymentConceptsService } from './payment-concepts.service';
 import { CreatePaymentConceptDto } from './dto/create-payment-concept.dto';
@@ -31,13 +30,8 @@ export class PaymentConceptsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    const paymentConcept = await this.paymentConceptsService.findOne(id);
-    if (!paymentConcept) {
-      throw new NotFoundException(`Payment concept with id ${id} not found`);
-    }
-
-    return paymentConcept;
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.paymentConceptsService.findOne(id);
   }
 
   @Patch(':id')
@@ -49,7 +43,7 @@ export class PaymentConceptsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.paymentConceptsService.remove(+id);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.paymentConceptsService.remove(id);
   }
 }

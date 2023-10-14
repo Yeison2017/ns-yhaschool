@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -37,16 +38,23 @@ export class PaymentConceptsService {
     return this.paymentConceptRepository.find({});
   }
 
-  findOne(id: string) {
-    return this.paymentConceptRepository.findOneBy({ id });
+  async findOne(id: string) {
+    const paymentConcept = await this.paymentConceptRepository.findOneBy({
+      id,
+    });
+    if (!paymentConcept) {
+      throw new NotFoundException(`Payment concept with id ${id} not found`);
+    }
+    return paymentConcept;
   }
 
   update(id: number, updatePaymentConceptDto: UpdatePaymentConceptDto) {
     return `This action updates a #${id} paymentConcept`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} paymentConcept`;
+  async remove(id: string) {
+    const paymentConcept = await this.findOne(id);
+    await this.paymentConceptRepository.remove(paymentConcept);
   }
 
   private handleDBExceptions(error: any) {
