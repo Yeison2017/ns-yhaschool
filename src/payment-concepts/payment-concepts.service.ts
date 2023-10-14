@@ -32,12 +32,13 @@ export class PaymentConceptsService {
     }
   }
 
+  // TODO: paginar
   findAll() {
-    return `This action returns all paymentConcepts`;
+    return this.paymentConceptRepository.find({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} paymentConcept`;
+  findOne(id: string) {
+    return this.paymentConceptRepository.findOneBy({ id });
   }
 
   update(id: number, updatePaymentConceptDto: UpdatePaymentConceptDto) {
