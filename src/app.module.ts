@@ -8,6 +8,7 @@ import { StudentsModule } from './students/students.module';
 import { DocumentTypesModule } from './document-types/document-types.module';
 import { SeedModule } from './seed/seed.module';
 import { PaymentConceptsModule } from './payment-concepts/payment-concepts.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { PaymentConceptsModule } from './payment-concepts/payment-concepts.modul
     StudentsModule,
     DocumentTypesModule,
     PaymentConceptsModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],

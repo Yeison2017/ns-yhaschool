@@ -8,10 +8,12 @@ import {
   Delete,
   Logger,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { PaymentConceptsService } from './payment-concepts.service';
 import { CreatePaymentConceptDto } from './dto/create-payment-concept.dto';
 import { UpdatePaymentConceptDto } from './dto/update-payment-concept.dto';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Controller('payment-concepts')
 export class PaymentConceptsController {
@@ -25,8 +27,8 @@ export class PaymentConceptsController {
   }
 
   @Get()
-  findAll() {
-    return this.paymentConceptsService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.paymentConceptsService.findAll(paginationDto);
   }
 
   @Get(':id')
