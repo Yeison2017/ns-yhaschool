@@ -1,13 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { validate as isUUID } from 'uuid';
 
 import { DocumentType } from './entities/document-type.entity';
-
 import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
 import { UpdateDocumentTypeDto } from './dto/update-document-type.dto';
+import { Helpers } from 'src/common/utils/helpers';
+import { PaginationDto } from '../common/dtos/pagination.dto';
 
 @Injectable()
 export class DocumentTypesService {
+  constructor(
+    @InjectRepository(DocumentType)
+    private readonly documentTypeRepository: Repository<DocumentType>,
+  ) {}
+
   private documentTypes: DocumentType[] = [
     // {
     //   id: uuid(),
@@ -16,29 +24,38 @@ export class DocumentTypesService {
     // },
   ];
 
-  create(createDocumentTypeDto: CreateDocumentTypeDto) {
-    // const { name, abbreviation  } = CreateDocumentTypeDto;
-    // const documentType: DocumentType = {
-    //   id: uuid(),
-    //   name: name.toLocaleLowerCase(),
-    //   abbreviation: new Date().getTime(),
-    // };
-    // this.documentTypes.push(documentType);
-    // return documentType;
-  }
-
-  findAll() {
-    return this.documentTypes;
-  }
-
-  findOne(id: string) {
-    const documentType = this.documentTypes.find(
-      (documentType) => documentType.id === id,
-    );
-    if (!documentType) {
-      throw new NotFoundException(`DocumentType with id "${id}" not found`);
+  async create(createDocumentTypeDto: CreateDocumentTypeDto) {
+    try {
+      const documentType = this.documentTypeRepository.create(
+        createDocumentTypeDto,
+      );
+      await this.documentTypeRepository.save(documentType);
+      return documentType;
+    } catch (error) {
+      Helpers.handleDBExceptions(error);
     }
+  }
 
+  findAll(paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
+    return this.documentTypeRepository.find({
+      take: limit,
+      skip: offset,
+    });
+  }
+
+  async findOne(term: string) {
+    let documentType: DocumentType;
+
+    if (isUUID(term)) {
+      documentType = await this.documentTypeRepository.findOneBy({
+        id: term,
+      });
+    } else {
+      documentType = await this.documentTypeRepository.findOneBy({
+        abbreviation: term.trim().toUpperCase(),
+      });
+    }
     return documentType;
   }
 

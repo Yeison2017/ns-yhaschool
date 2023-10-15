@@ -7,10 +7,12 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { DocumentTypesService } from './document-types.service';
 import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
 import { UpdateDocumentTypeDto } from './dto/update-document-type.dto';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Controller('document-type')
 export class DocumentTypesController {
@@ -22,13 +24,13 @@ export class DocumentTypesController {
   }
 
   @Get()
-  findAll() {
-    return this.documentTypesService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.documentTypesService.findAll(paginationDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.documentTypesService.findOne(id);
+  @Get(':term')
+  findOne(@Param('term') term: string) {
+    return this.documentTypesService.findOne(term);
   }
 
   @Patch(':id')

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Helpers } from 'src/common/utils/helpers';
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class DocumentType {
@@ -14,4 +15,14 @@ export class DocumentType {
     unique: true,
   })
   abbreviation: string;
+
+  @BeforeInsert()
+  capitaliceFirstLetterName() {
+    this.name = Helpers.capitalizeFirstLetter(this.name);
+  }
+
+  @BeforeInsert()
+  toUpperCaseAbbreviation() {
+    this.abbreviation = this.abbreviation.trim().toUpperCase();
+  }
 }
