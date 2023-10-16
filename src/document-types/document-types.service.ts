@@ -52,10 +52,23 @@ export class DocumentTypesService {
         id: term,
       });
     } else {
-      documentType = await this.documentTypeRepository.findOneBy({
-        abbreviation: term.trim().toUpperCase(),
-      });
+      // documentType = await this.documentTypeRepository.findOneBy({
+      //   abbreviation: term.trim().toUpperCase(),
+      // });
+      const queryBuilder = this.documentTypeRepository.createQueryBuilder();
+      documentType = await queryBuilder
+        .where('name =:name or abbreviation =:abbreviation', {
+          name: Helpers.capitalizeFirstLetter(term),
+          // name: term,
+          abbreviation: term.trim().toUpperCase(),
+        })
+        .getOne();
     }
+
+    if (!documentType) {
+      throw new NotFoundException(`Document type with ${term} not found`);
+    }
+
     return documentType;
   }
 
