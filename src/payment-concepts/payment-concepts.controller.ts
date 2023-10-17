@@ -38,10 +38,10 @@ export class PaymentConceptsController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePaymentConceptDto: UpdatePaymentConceptDto,
   ) {
-    return this.paymentConceptsService.update(+id, updatePaymentConceptDto);
+    return this.paymentConceptsService.update(id, updatePaymentConceptDto);
   }
 
   @Delete(':id')

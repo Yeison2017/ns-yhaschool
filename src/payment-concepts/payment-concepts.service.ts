@@ -12,6 +12,7 @@ import { CreatePaymentConceptDto } from './dto/create-payment-concept.dto';
 import { UpdatePaymentConceptDto } from './dto/update-payment-concept.dto';
 import { PaymentConcept } from './entities/payment-concept.entity';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
+import { Helpers } from 'src/common/utils/helpers';
 
 @Injectable()
 export class PaymentConceptsService {
@@ -52,8 +53,24 @@ export class PaymentConceptsService {
     return paymentConcept;
   }
 
-  update(id: number, updatePaymentConceptDto: UpdatePaymentConceptDto) {
-    return `This action updates a #${id} paymentConcept`;
+  async update(id: string, updatePaymentConceptDto: UpdatePaymentConceptDto) {
+    const paymentConcept = await this.paymentConceptRepository.preload({
+      id,
+      ...updatePaymentConceptDto,
+    });
+
+    if (!paymentConcept) {
+      throw new NotFoundException(`Payment concept with id ${id} not found`);
+    }
+
+    try {
+      await this.paymentConceptRepository.save(paymentConcept);
+    } catch (error) {
+      // this.handleDBExceptions(error);
+      Helpers.handleDBExceptions(error);
+    }
+
+    return paymentConcept;
   }
 
   async remove(id: string) {

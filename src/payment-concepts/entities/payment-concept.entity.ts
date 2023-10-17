@@ -1,4 +1,11 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Helpers } from 'src/common/utils/helpers';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class PaymentConcept {
@@ -17,21 +24,12 @@ export class PaymentConcept {
   regularPayments: number[];
 
   @BeforeInsert()
-  capitalizeFirstLetterName() {
-    this.name = this.capitalizeFirstLetter(this.name);
+  capitalizeFirstLetterNameInsert() {
+    this.name = Helpers.capitalizeFirstLetter(this.name);
   }
 
-  capitalizeFirstLetter = (inputString: string): string => {
-    inputString = inputString.trim();
-
-    if (inputString.length === 0) {
-      return inputString;
-    }
-
-    const firstLetter = inputString[0].toUpperCase();
-    const restOfString = inputString.slice(1).toLowerCase();
-    const result = firstLetter + restOfString;
-
-    return result;
-  };
+  @BeforeUpdate()
+  capitalizeFirstLetterNameUpdate() {
+    this.name = Helpers.capitalizeFirstLetter(this.name);
+  }
 }
