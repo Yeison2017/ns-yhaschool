@@ -31,7 +31,7 @@ export class PaymentConceptsService {
       await this.paymentConceptRepository.save(paymentConcept);
       return paymentConcept;
     } catch (error) {
-      this.handleDBExceptions(error);
+      Helpers.handleDBExceptions(error);
     }
   }
 
@@ -76,15 +76,5 @@ export class PaymentConceptsService {
   async remove(id: string) {
     const paymentConcept = await this.findOne(id);
     await this.paymentConceptRepository.remove(paymentConcept);
-  }
-
-  private handleDBExceptions(error: any) {
-    if (error.code === '23505') {
-      throw new BadRequestException(error.detail);
-    }
-    this.logger.error(error);
-    throw new InternalServerErrorException(
-      'Unexpected error, check server logs',
-    );
   }
 }

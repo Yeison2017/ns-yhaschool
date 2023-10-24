@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import { StudentPhoto } from './student-photo.entity';
 
 @Entity()
 export class Student {
@@ -23,6 +31,39 @@ export class Student {
   })
   secondLastName: string;
 
-  @Column('text')
+  @Column('text', {
+    nullable: true,
+  })
   identification: string;
+
+  @Column('date', {
+    nullable: true,
+  })
+  birthdate: Date;
+
+  @Column('text', {
+    nullable: true,
+  })
+  phone1: string;
+
+  @Column('text', {
+    nullable: true,
+  })
+  phone2: string;
+
+  @Column('text', {
+    nullable: true,
+  })
+  email: string;
+
+  @Column('boolean')
+  isEnabled: boolean;
+
+  @Column('date')
+  readonly creationDate: Date;
+
+  @OneToMany(() => StudentPhoto, (studentPhoto) => studentPhoto.student, {
+    cascade: true,
+  })
+  photo?: StudentPhoto;
 }

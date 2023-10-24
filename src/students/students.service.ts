@@ -3,20 +3,31 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import { Student } from './interfaces/student.interface';
 import { CreateStudentDto, UpdateStudentDto } from './dto';
+import { Student } from './entities';
+import { Helpers } from 'src/common/utils/helpers';
 
 @Injectable()
 export class StudentsService {
-  private students: Student[] = [
-    // {
-    //   id: uuid(),
-    //   name: 'Luis',
-    //   lastName: 'Perez',
-    // },
-  ];
+  constructor(
+    @InjectRepository(Student)
+    private readonly studentRepository: Repository<Student>,
+  ) {}
+
+  private students: Student[] = [];
+
+  async create(createStudenDto: CreateStudentDto) {
+    try {
+      const studentConcept = this.studentRepository.create(createStudenDto);
+      await this.studentRepository.save(studentConcept);
+      return studentConcept;
+    } catch (error) {
+      Helpers.handleDBExceptions(error);
+    }
+  }
 
   findAll() {
     return this.students;
@@ -29,35 +40,21 @@ export class StudentsService {
     return student;
   }
 
-  create(createStudenDto: CreateStudentDto) {
-    const student: Student = {
-      id: uuid(),
-      ...createStudenDto,
-    };
-
-    this.students.push(student);
-
-    return student;
-  }
-
   update(id: string, updateStudentDto: UpdateStudentDto) {
-    let studentDB = this.findOneById(id);
-
-    if (updateStudentDto.id && updateStudentDto.id !== id)
-      throw new BadRequestException(`Car id is not valid inside body`);
-
-    this.students = this.students.map((student) => {
-      if (student.id === id) {
-        studentDB = {
-          ...studentDB,
-          ...updateStudentDto,
-          id,
-        };
-      }
-
-      return student;
-    });
-    return studentDB;
+    // let studentDB = this.findOneById(id);
+    // if (updateStudentDto.id && updateStudentDto.id !== id)
+    //   throw new BadRequestException(`Car id is not valid inside body`);
+    // this.students = this.students.map((student) => {
+    //   if (student.id === id) {
+    //     studentDB = {
+    //       ...studentDB,
+    //       ...updateStudentDto,
+    //       id,
+    //     };
+    //   }
+    //   return student;
+    // });
+    // return studentDB;
   }
 
   delete(id: string) {

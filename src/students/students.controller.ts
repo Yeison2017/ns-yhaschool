@@ -19,19 +19,19 @@ import { UpdateStudentDto } from './dto/update-student.dto';
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
+  @Post()
+  create(@Body() createStudentDto: CreateStudentDto) {
+    return this.studentsService.create(createStudentDto);
+  }
+
   @Get()
-  getAllStudents() {
+  findAll() {
     return this.studentsService.findAll();
   }
 
   @Get(':id')
   getStudentById(@Param('id', ParseUUIDPipe) id: string) {
     return this.studentsService.findOneById(id);
-  }
-
-  @Post()
-  createStudent(@Body() createStudentDto: CreateStudentDto) {
-    return this.studentsService.create(createStudentDto);
   }
 
   @Patch(':id')
