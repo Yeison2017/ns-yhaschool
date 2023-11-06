@@ -59,11 +59,14 @@ export class Student {
   @Column('boolean')
   isEnabled: boolean;
 
-  @Column('date')
+  @Column('date', {
+    nullable: true,
+  })
   readonly creationDate: Date;
 
   @OneToMany(() => StudentPhoto, (studentPhoto) => studentPhoto.student, {
     cascade: true,
+    eager: true,
   })
-  photo?: StudentPhoto;
+  photos?: StudentPhoto[];
 }

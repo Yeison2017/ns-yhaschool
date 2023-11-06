@@ -66,7 +66,6 @@ export class PaymentConceptsService {
     try {
       await this.paymentConceptRepository.save(paymentConcept);
     } catch (error) {
-      // this.handleDBExceptions(error);
       Helpers.handleDBExceptions(error);
     }
 

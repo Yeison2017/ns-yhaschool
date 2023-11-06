@@ -55,13 +55,14 @@ export class DocumentTypesService {
       // documentType = await this.documentTypeRepository.findOneBy({
       //   abbreviation: term.trim().toUpperCase(),
       // });
-      const queryBuilder = this.documentTypeRepository.createQueryBuilder();
+      const queryBuilder =
+        this.documentTypeRepository.createQueryBuilder('doct');
       documentType = await queryBuilder
         .where('name =:name or abbreviation =:abbreviation', {
           name: Helpers.capitalizeFirstLetter(term),
-          // name: term,
           abbreviation: term.trim().toUpperCase(),
         })
+        // .leftJoinAndSelect('doct.photos', 'doctPhotos')
         .getOne();
     }
 

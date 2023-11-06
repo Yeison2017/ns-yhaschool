@@ -10,6 +10,8 @@ export class StudentPhoto {
   @Column('text')
   url: string;
 
-  @ManyToOne(() => Student, (student) => student.photo)
+  @ManyToOne(() => Student, (student) => student.photos, {
+    onDelete: 'CASCADE',
+  })
   student: Student;
 }

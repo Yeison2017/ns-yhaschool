@@ -48,10 +48,11 @@ export class CreateStudentDto {
   readonly isEnabled: boolean;
 
   @IsDate()
+  @IsOptional()
   readonly creationDate: Date;
 
   @IsString({ each: true })
   @IsArray()
   @IsOptional()
-  images?: string[];
+  photos?: string[];
 }
