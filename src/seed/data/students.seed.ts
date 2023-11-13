@@ -1,31 +1,32 @@
-import { v4 as uuid } from 'uuid';
+import { faker } from '@faker-js/faker';
 
 import { Student } from 'src/students/interfaces/student.interface';
 
-export const STUDENTS_SEED: Student[] = [
-  {
-    id: uuid(),
-    name: 'John',
-    lastName: 'Doe',
-  },
-  {
-    id: uuid(),
-    name: 'Ezequiel',
-    lastName: 'Holgado',
-  },
-  {
-    id: uuid(),
-    name: 'Nicolas',
-    lastName: 'Reyes',
-  },
-  {
-    id: uuid(),
-    name: 'Fatima',
-    lastName: 'Muriel',
-  },
-  {
-    id: uuid(),
-    name: 'Modesta',
-    lastName: 'Navarro',
-  },
-];
+const generateRandomStudent = (): Student => {
+  const student: Student = {
+    firstName: faker.person.firstName(),
+    secondName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    secondLastName: faker.person.lastName(),
+    identification: faker.string.numeric(10),
+    birthdate: faker.date.birthdate(),
+    phone1: faker.helpers
+      .rangeToNumber({ min: 3000000000, max: 3029999999 })
+      .toString(),
+    phone2: faker.helpers
+      .rangeToNumber({ min: 3000000000, max: 3029999999 })
+      .toString(),
+    email: faker.internet.email(),
+    isEnabled: faker.datatype.boolean(),
+    creationDate: faker.date.past(),
+    photos: [faker.image.url(), faker.image.url(), faker.image.url()],
+  };
+
+  return student;
+};
+
+const numberOfStudents: number = 10;
+export const STUDENTS_SEED: Student[] = Array.from(
+  { length: numberOfStudents },
+  generateRandomStudent,
+);

@@ -7,14 +7,24 @@ import { DOCUMENT_TYPES_SEED } from './data/documentTypes.seed';
 
 @Injectable()
 export class SeedService {
-  constructor(
-    private readonly studentsService: StudentsService,
-    private readonly documentTypes: DocumentTypesService,
-  ) {}
+  constructor(private readonly studentsService: StudentsService) {}
 
-  populateDB() {
-    // this.studentsService.fillStudentsWithSeedData(STUDENTS_SEED);
-    // this.documentTypes.filldocumentTypesWithSeedData(DOCUMENT_TYPES_SEED);
-    // return 'SEED executed';
+  async runSeed() {
+    await this.insertNewStudents();
+    return 'SEED EXECUTED';
+  }
+
+  private async insertNewStudents() {
+    await this.studentsService.deleteAllStudents();
+
+    const students = STUDENTS_SEED;
+
+    const insertPromises = [];
+    students.forEach((student) => {
+      insertPromises.push(this.studentsService.create(student));
+    });
+    await Promise.all(insertPromises);
+
+    return true;
   }
 }

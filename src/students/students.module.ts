@@ -8,7 +8,7 @@ import { Student, StudentPhoto } from './entities';
 @Module({
   controllers: [StudentsController],
   providers: [StudentsService],
-  exports: [StudentsService],
+  exports: [StudentsService, TypeOrmModule],
   imports: [TypeOrmModule.forFeature([Student, StudentPhoto])],
 })
 export class StudentsModule {}
